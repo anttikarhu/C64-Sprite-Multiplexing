@@ -35,8 +35,22 @@
         <PreBuildCommands />
         <PostBuildCommands />
     </BuildEvents>
-    <BuildList />
+    <BuildList>
+        <FileName>app.asm</FileName>
+    </BuildList>
     <DetermineBuildOrder>0</DetermineBuildOrder>
     <PaddingByte>0</PaddingByte>
-    <SourceFiles />
+    <SourceFiles>
+        <SourceFile>
+            <Name>app.asm</Name>
+            <PrgName />
+            <FileType>2</FileType>
+            <IncludeInBuild>True</IncludeInBuild>
+            <Regions />
+            <Breakpoints />
+            <Bookmarks />
+            <Topmost>True</Topmost>
+            <FileOpen>True</FileOpen>
+        </SourceFile>
+    </SourceFiles>
 </Project>
