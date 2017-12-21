@@ -62,23 +62,23 @@ INIT
         STA SPR_COLOR0
    
         ; SET SPRITE X
-        LDX #%00000000
+        LDX #%11110000
         STX SPR_MSBX
-        LDX #40
+        LDX #0
         STX $D000
-        LDX #70
+        LDX #64
         STX $D002
-        LDX #100
+        LDX #128
         STX $D004
-        LDX #130
+        LDX #192
         STX $D006
-        LDX #160
+        LDX #0
         STX $D008
-        LDX #190
+        LDX #64
         STX $D00A
-        LDX #220
+        LDX #128
         STX $D00C
-        LDX #250
+        LDX #192
         STX $D00E
         
         ; SET SPRITE POINTERS
@@ -136,15 +136,71 @@ SETCLR1 LDA $FC
         CPY #8
         BNE SETCLR1
 
-        ; MOVE SPRITE
+        ; MOVE SPRITES
         DEC $D000
+        LDX $D000
+        CPX #255
+        BNE NEXT0
+        LDA #%00000001
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT0
         DEC $D002
+        LDX $D002
+        CPX #255
+        BNE NEXT1
+        LDA #%00000010
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT1
         DEC $D004
+        LDX $D004
+        CPX #255
+        BNE NEXT2
+        LDA #%00000100
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT2
         DEC $D006
+        LDX $D006
+        CPX #255
+        BNE NEXT3
+        LDA #%00001000
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT3
         DEC $D008
+        LDX $D008
+        CPX #255
+        BNE NEXT4
+        LDA #%00010000
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT4
         DEC $D00A
+        LDX $D00A
+        CPX #255
+        BNE NEXT5
+        LDA #%00100000
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT5
         DEC $D00C
+        LDX $D00C
+        CPX #255
+        BNE NEXT6
+        LDA #%01000000
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT6
         DEC $D00E
+        LDX $D00E
+        CPX #255
+        BNE NEXT7
+        LDA #%10000000
+        EOR SPR_MSBX
+        STA SPR_MSBX
+NEXT7
 
         LDA #116 ; NEXT DO IRQ1 AT RASTER LINE 116
         STA IRQRASTER
