@@ -137,70 +137,22 @@ SETCLR1 LDA $FC
         BNE SETCLR1
 
         ; MOVE SPRITES
-        DEC $D000
-        LDX $D000
-        CPX #255
-        BNE NEXT0
-        LDA #%00000001
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT0
-        DEC $D002
-        LDX $D002
-        CPX #255
-        BNE NEXT1
-        LDA #%00000010
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT1
-        DEC $D004
-        LDX $D004
-        CPX #255
-        BNE NEXT2
-        LDA #%00000100
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT2
-        DEC $D006
-        LDX $D006
-        CPX #255
-        BNE NEXT3
-        LDA #%00001000
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT3
-        DEC $D008
-        LDX $D008
-        CPX #255
-        BNE NEXT4
-        LDA #%00010000
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT4
-        DEC $D00A
-        LDX $D00A
-        CPX #255
-        BNE NEXT5
-        LDA #%00100000
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT5
-        DEC $D00C
-        LDX $D00C
-        CPX #255
-        BNE NEXT6
-        LDA #%01000000
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT6
-        DEC $D00E
-        LDX $D00E
-        CPX #255
-        BNE NEXT7
-        LDA #%10000000
-        EOR SPR_MSBX
-        STA SPR_MSBX
-NEXT7
+        LDA #0
+        JSR MOVEX ; TRYING TO MOVE THIS REPEATED STUFF TO A SUBROUTINE
+        LDA #1
+        JSR MOVEX
+        LDA #2
+        JSR MOVEX
+        LDA #3
+        JSR MOVEX
+        LDA #4
+        JSR MOVEX
+        LDA #5
+        JSR MOVEX
+        LDA #6
+        JSR MOVEX
+        LDA #7
+        JSR MOVEX
 
         LDA #116 ; NEXT DO IRQ1 AT RASTER LINE 116
         STA IRQRASTER
@@ -292,6 +244,33 @@ SETCLR3 LDA $FC
         ASL IRQFLAG
 
         JMP IRQFINISH ; LET MACHINE HANDLE OTHER IRQS
+
+
+        ; SUBROUTINE THAT MOVES SPRITE IN X AXIS ONE PIXEL TO THE LEFT
+MOVEX   ; A REGISTER = SPRITE NUMBER 0-7
+        STA $FD ; HOLDS SPRITE NUMBER FOR COMPARISON
+        ASL ; A * 2, BECAUSE X POINTERS ARE THE EVEN ONES FROM $D000
+        TAX ; PUT POINTER OFFSET TO X REGISTERS
+
+        DEC $D000,X ; DECREASE X COORDINATE OF THE GIVEN SPRITE
+
+        LDY $D000,X ; COMPARE THE NEW X VALUE...
+        CPY #255 ; ...WITH 255
+        BNE NOMSB ; AND GO TO RETURN IF NOT TIME YET TO TOGGLE THE MSB
+
+        LDY #0 ; SHIFT COUNTER
+        LDA #%00000001 ; MSB TOGGLE MASK
+
+SHIFT   CPY $FD ; IF THE COUNTER EQUALS SPRITE NUMBER...
+        BEQ TOGGLE ; ...GO TO TOGGLE.
+        ASL ; IF NOT, SHIFT THE MASK LEFT,
+        INY ; INCREASE COUNTER,
+        JMP SHIFT ; AND CHECK AGAIN UNTIL PROPER MASK IS FOUND.
+
+TOGGLE  EOR SPR_MSBX ; TOGGLE MSB,
+        STA SPR_MSBX ; STORE MSB,
+NOMSB   RTS ; AND END SUBROUTINE.
+
 
 SPRDATA BYTE $00,$00,$00
         BYTE $00,$00,$00
