@@ -1,6 +1,6 @@
 # C64-Sprite-Multiplexing
 
-Display more than 8 sprites at once. Should work on CBM prg Studio.
+Display more than 8 sprites at once. Also has first asm subroutines I ever wrote, yay! Should work on CBM prg Studio.
 
 How to:
 - Checkout code
